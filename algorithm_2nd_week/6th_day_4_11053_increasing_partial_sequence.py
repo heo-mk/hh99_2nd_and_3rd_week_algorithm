@@ -38,11 +38,31 @@ for i in range(N):
         # if sequence[j] < sequence[i]:
         #     count_set[i] = max(count_set[i], count_set[j]+1)
             
-        if sequence[j] < sequence[i] and count_set[j] > count_set[i]:
-            count_set[i] = count_set[j]
-        count_set[i] += 1  # dynamic programming에서 저장 시행 하는 부분.       
+        if sequence[j] < sequence[i]:
+            count_set[i] = max(count_set[i], count_set[j] + 1)
+        # count_set[i] += 1  # dynamic programming에서 저장 시행 하는 부분.       
     print(count_set)
     
-print(count_set)
+# print(count_set)
 print(max(count_set))
-    
+
+# 위 풀이 방식은 기억하며 풀기
+# i번 위치에서 i-1번 체크해야 하므로 시간 복잡도 = O(N^2)
+# 그래서 비효율
+# 효율적인건 이진탐색법 : 시간복잡도는 O(NlogN)
+import bisect
+
+N = int(input())     # N = 수열의 크기
+sequence = list(map(int, input().split()))  
+
+dp = [sequence[0]]
+
+for i in range(N):
+    if sequence[i] > dp[-1]:
+        dp.append(sequence[i])
+    else:
+        idx = bisect.bisect_left(dp, sequence[i])
+        sequence[idx] = sequence[i]
+    print(sequence)
+    print(dp)
+print(len(dp))
